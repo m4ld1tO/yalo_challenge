@@ -9,6 +9,7 @@ import net.thucydides.core.annotations.Steps;
 import org.openqa.selenium.WebDriver;
 import yalo.elements.accountupdate.AccountAction;
 import yalo.elements.commonbuttons.ButtonsAction;
+import yalo.elements.galen.GalenAction;
 import yalo.elements.paymentupdate.PaymentAction;
 import yalo.elements.personalfinance.PersonalAction;
 import yalo.elements.tryitout.TryitAction;
@@ -41,6 +42,9 @@ public class test_yalo_templates {
 
     @Steps
     PersonalAction personalAction;
+
+    @Steps
+    GalenAction galenAction;
 
     @Given("welcome home page")
     public void welcomeHomePage() {
@@ -135,5 +139,41 @@ public class test_yalo_templates {
     public void assertTextPersonalFinanceTemplate() throws InterruptedException {
         assertThat(personalAction.assert_text_template(), is("Hey Felipe Alvarado. A reminder from José Altamirano that your payment due date is 11/11/2019. Your balance is 1520."));
 
+    }
+
+    @Given("welcome galen home page")
+    public void welcomeGalenHomePage() {
+        navigateTo.YaloHomePage();
+    }
+
+    @When("click button login")
+    public void clickButtonLogin() {
+        galenAction.click_hp();
+    }
+
+    @Then("assert that is a login form")
+    public void assertThatIsALoginForm() {
+        assertThat(galenAction.login_form_text(), is("Login"));
+    }
+
+    @When("user set username and password")
+    public void userSetUsernameAndPassword() {
+        galenAction.login_page();
+
+    }
+
+    @Then("assert My Notes title")
+    public void assertMyNotesTitle() {
+        assertThat(galenAction.my_notes(), is("My Notes"));
+    }
+
+    @When("user set bad username and password")
+    public void userSetBadUsernameAndPassword() {
+        galenAction.login_page_incorrect();
+    }
+
+    @Then("assert message about incorrect information")
+    public void assertMessageAboutIncorrectInformation() {
+        assertThat(galenAction.error_message(), is("The username or password are incorrect"));
     }
 }
